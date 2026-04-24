@@ -106,23 +106,27 @@ namespace ModifiableVariable
         public ModifierDelegateHandler<T> Add(ModifierDelegate<T> modifier, TStage stage = default)
         {
             _modifiersHasChanged = true;
+            _cachedFrame = -1;
             return GetStage(stage)?.Add(modifier) ?? default;
         }       
         
         public bool Remove(ModifierDelegate<T> modifier, TStage stage)
         {
             _modifiersHasChanged = true;
+            _cachedFrame = -1;
             return GetStage(stage)?.Remove(modifier) ?? false;
         }
         public bool Remove(ModifierDelegateHandler<T> handler, TStage stage)
         {
             _modifiersHasChanged = true;
+            _cachedFrame = -1;
             return Remove(handler.Modifier, stage);
         }
         
         public bool Remove(ModifierDelegate<T> modifier)
         {
             _modifiersHasChanged = true;
+            _cachedFrame = -1;
             for (var i = 0; i < _stages.Count; i++)
             {
                 if (_stages[i].Remove(modifier))
@@ -135,6 +139,7 @@ namespace ModifiableVariable
         public bool Remove(ModifierDelegateHandler<T> modifier)
         {
             _modifiersHasChanged = true;
+            _cachedFrame = -1;
             for (var i = 0; i < _stages.Count; i++)
             {
                 if (_stages[i].Remove(modifier))

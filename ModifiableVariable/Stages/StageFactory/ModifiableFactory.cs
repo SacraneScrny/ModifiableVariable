@@ -17,7 +17,9 @@ namespace ModifiableVariable.Stages.StageFactory
 
             for (var i = 0; i < values.Length; i++)
             {
-                modifiable.AddStage(StageArithmetic<T>.Get(ops[i]), values[i]);
+                var s = StageArithmetic<T>.Get(ops[i]);
+                if (s == null) continue;
+                modifiable.AddStage(s, values[i]);
             }
         }
 

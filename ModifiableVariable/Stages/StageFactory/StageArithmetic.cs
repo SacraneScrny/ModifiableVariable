@@ -10,22 +10,18 @@ namespace ModifiableVariable.Stages.StageFactory
 
         static StageArithmetic()
         {
-            TryCompile(StageOpKind.Add,      Expression.Add);
+            TryCompile(StageOpKind.Add, Expression.Add);
             TryCompile(StageOpKind.Subtract, Expression.Subtract);
             TryCompile(StageOpKind.Multiply, Expression.Multiply);
-            TryCompile(StageOpKind.Divide,   Expression.Divide);
+            TryCompile(StageOpKind.Divide, Expression.Divide);
 
             Register(StageOpKind.Override, (a, b) => b);
         }
 
         public static StageOp<T> Get(StageOpKind kind)
         {
-            if (_ops.TryGetValue(kind, out var op)) return op;
-            throw new InvalidOperationException($"StageOp '{kind}' not registered for {typeof(T).Name}");
+            return _ops.GetValueOrDefault(kind);
         }
-
-        public static bool TryGet(StageOpKind kind, out StageOp<T> op)
-            => _ops.TryGetValue(kind, out op);
 
         public static void Register(StageOpKind kind, StageOp<T> op)
             => _ops[kind] = op;

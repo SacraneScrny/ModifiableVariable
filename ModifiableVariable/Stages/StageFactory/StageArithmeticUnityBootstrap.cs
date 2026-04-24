@@ -4,7 +4,7 @@ namespace ModifiableVariable.Stages.StageFactory
 {
     public static class StageArithmeticUnityBootstrap
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
         public static void Init()
         {
             //bool
@@ -49,7 +49,7 @@ namespace ModifiableVariable.Stages.StageFactory
             // Vector4
             StageArithmetic<Vector4>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<Vector4>.Register(StageOpKind.Subtract, (a, b) => a - b);
-            //StageArithmetic<Vector4>.Register(StageOpKind.Multiply, (a, b) => a * b);
+            //StageArithmetic<Vector4>.Register(StageOpKind.Scale, (a, b) => a * b);
             StageArithmetic<Vector4>.Register(StageOpKind.Lerp, (a, b) => Vector4.Lerp(a, b, 0.5f));
             StageArithmetic<Vector4>.Register(StageOpKind.Min, Vector4.Min);
             StageArithmetic<Vector4>.Register(StageOpKind.Max, Vector4.Max);
