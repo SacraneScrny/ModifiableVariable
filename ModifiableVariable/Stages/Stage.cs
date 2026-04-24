@@ -5,7 +5,7 @@ using ModifiableVariable.Entities;
 
 namespace ModifiableVariable.Stages
 {
-    public class Stage<T>
+    public class Stage<T> : IDisposable
     {
         public readonly StageOp<T> Op;
         readonly List<ModifierDelegate<T>> _modifiers = new();
@@ -50,5 +50,7 @@ namespace ModifiableVariable.Stages
         {
             _modifiers.Clear();
         }
+
+        public void Dispose() => Clear();
     }
 }

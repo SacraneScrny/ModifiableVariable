@@ -11,24 +11,14 @@ using UnityEngine;
 namespace ModifiableVariable
 {
     [Serializable]
-    public class Modifiable<T, TStage>
+    public class Modifiable<T, TStage> : IDisposable
         where TStage : Enum
     {
         [SerializeField] T _baseValue;
-        public T BaseValue
-        {
-            get => _baseValue;
-            set
-            {
-                if (!_comparer.Equals(_baseValue, value))
-                {
-                    _baseValue = value;
-                    _cachedFrame = -1;
-                } 
-            }
-        }
-
+        public T BaseValue => _baseValue;
+        
         readonly Dictionary<int, Stage<T>> _stageMap = new();
+        readonly List<ValueChangedDelegate<T>> _valueChangedCallbacks = new();
         T _cachedValue;
         T _defaultValue;
         bool _hasInited;
@@ -82,25 +72,38 @@ namespace ModifiableVariable
             return result;
         }
         #endif
-        public T GetValue()
+        public T Value
         {
-            if (!_hasInited)
+            set
             {
-                _defaultValue = _baseValue;
-                _hasInited = true;
+                if (!_comparer.Equals(_baseValue, value))
+                {
+                    _baseValue = value;
+                    _cachedFrame = -1;
+                } 
             }
-
-            UpdateCountIfDirty();
-            if (!IsFrameDirty())
-                return _cachedValue;
-
-            var value = Calculate();
-            if (!_comparer.Equals(_cachedValue, value))
+            get 
             {
-                _cachedValue = value;
-                ValueChanged?.Invoke(value);
+                if (!_hasInited)
+                {
+                    _defaultValue = _baseValue;
+                    _hasInited = true;
+                }
+
+                UpdateCountIfDirty();
+                if (!IsFrameDirty())
+                    return _cachedValue;
+
+                var value = Calculate();
+                if (!_comparer.Equals(_cachedValue, value))
+                {
+                    _cachedValue = value;
+                    for (var i = 0; i < _valueChangedCallbacks.Count; i++)
+                        _valueChangedCallbacks[i](value);
+                }
+
+                return value;
             }
-            return value;
         }
          
         public ModifierDelegateHandler<T> Add(ModifierDelegate<T> modifier, TStage stage = default)
@@ -150,7 +153,11 @@ namespace ModifiableVariable
             return false;
         }
 
-        public event Action<T> ValueChanged;
+        public ValueChangedHandler<T> OnValueChanged(ValueChangedDelegate<T> callback)
+        {
+            _valueChangedCallbacks.Add(callback);
+            return new ValueChangedHandler<T>(callback, _valueChangedCallbacks.Remove);
+        }
         
         public void Clear()
         {
@@ -193,7 +200,7 @@ namespace ModifiableVariable
         
         public static implicit operator T (Modifiable<T, TStage> obj)
         {
-            return obj.GetValue();
+            return obj.Value;
         }        
         public static implicit operator Modifiable<T, TStage> (T obj)
         {
@@ -207,6 +214,13 @@ namespace ModifiableVariable
                 UpdateCountIfDirty();
                 return _cachedCount;
             }
+        }
+
+        public void Dispose()
+        {
+            _valueChangedCallbacks.Clear();
+            for (var i = 0; i < _stages.Count; i++)
+                _stages[i].Dispose();
         }
     }
 }
