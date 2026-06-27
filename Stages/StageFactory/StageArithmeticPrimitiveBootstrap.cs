@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace ModifiableVariable.Stages.StageFactory
 {
-    // Registers the built-in numeric primitives with explicit delegates so they never
-    // depend on runtime expression compilation. This keeps them working on AOT/IL2CPP
-    // targets such as WebGL, where no JIT is available.
+    /// <summary>
+    /// Registers numeric primitives with explicit delegates so they never depend on
+    /// runtime expression compilation, keeping them functional on AOT/IL2CPP targets
+    /// such as WebGL.
+    /// </summary>
     public static class StageArithmeticPrimitiveBootstrap
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+        /// <summary>Registers the built-in numeric primitive operations.</summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Init()
         {
-            // int
             StageArithmetic<int>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<int>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<int>.Register(StageOpKind.Multiply, (a, b) => a * b);
@@ -21,7 +23,6 @@ namespace ModifiableVariable.Stages.StageFactory
             StageArithmetic<int>.Register(StageOpKind.Max, Math.Max);
             StageArithmetic<int>.Register(StageOpKind.Override, (a, b) => b);
 
-            // uint
             StageArithmetic<uint>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<uint>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<uint>.Register(StageOpKind.Multiply, (a, b) => a * b);
@@ -30,7 +31,6 @@ namespace ModifiableVariable.Stages.StageFactory
             StageArithmetic<uint>.Register(StageOpKind.Max, Math.Max);
             StageArithmetic<uint>.Register(StageOpKind.Override, (a, b) => b);
 
-            // long
             StageArithmetic<long>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<long>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<long>.Register(StageOpKind.Multiply, (a, b) => a * b);
@@ -39,7 +39,6 @@ namespace ModifiableVariable.Stages.StageFactory
             StageArithmetic<long>.Register(StageOpKind.Max, Math.Max);
             StageArithmetic<long>.Register(StageOpKind.Override, (a, b) => b);
 
-            // float
             StageArithmetic<float>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<float>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<float>.Register(StageOpKind.Multiply, (a, b) => a * b);
@@ -49,7 +48,6 @@ namespace ModifiableVariable.Stages.StageFactory
             StageArithmetic<float>.Register(StageOpKind.Lerp, (a, b) => Mathf.Lerp(a, b, 0.5f));
             StageArithmetic<float>.Register(StageOpKind.Override, (a, b) => b);
 
-            // double
             StageArithmetic<double>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<double>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<double>.Register(StageOpKind.Multiply, (a, b) => a * b);

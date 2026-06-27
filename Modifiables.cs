@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 
 using ModifiableVariable.Stages;
 using ModifiableVariable.Stages.StageFactory;
 
 namespace ModifiableVariable
 {
+    /// <summary>Modifiable with combined OR/AND/Override gate stages.</summary>
     [Serializable]
     public class GateModifiable<T> : Modifiable<T, GateGeneral>
     {
@@ -14,6 +15,8 @@ namespace ModifiableVariable
         public static implicit operator T(GateModifiable<T> obj) => obj.Value;
         public static implicit operator GateModifiable<T>(T obj) => new(obj);
     }
+
+    /// <summary>Modifiable with AND/Override gate stages.</summary>
     [Serializable]
     public class GateConjunctionModifiable<T> : Modifiable<T, GateConjunction>
     {
@@ -23,6 +26,8 @@ namespace ModifiableVariable
         public static implicit operator T(GateConjunctionModifiable<T> obj) => obj.Value;
         public static implicit operator GateConjunctionModifiable<T>(T obj) => new(obj);
     }
+
+    /// <summary>Modifiable with OR/Override gate stages.</summary>
     [Serializable]
     public class GateDisjunctionModifiable<T> : Modifiable<T, GateDisjunction>
     {
@@ -32,6 +37,8 @@ namespace ModifiableVariable
         public static implicit operator T(GateDisjunctionModifiable<T> obj) => obj.Value;
         public static implicit operator GateDisjunctionModifiable<T>(T obj) => new(obj);
     }
+
+    /// <summary>Modifiable with a multi-step OR/AND/OR/Override gate pipeline.</summary>
     [Serializable]
     public class GateComplexModifiable<T> : Modifiable<T, GateComplex>
     {
@@ -41,7 +48,8 @@ namespace ModifiableVariable
         public static implicit operator T(GateComplexModifiable<T> obj) => obj.Value;
         public static implicit operator GateComplexModifiable<T>(T obj) => new(obj);
     }
-    
+
+    /// <summary>Default modifiable with additive then multiplicative stages.</summary>
     [Serializable]
     public class Modifiable<T> : Modifiable<T, General>
     {
@@ -52,6 +60,7 @@ namespace ModifiableVariable
         public static implicit operator Modifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable with a single additive stage.</summary>
     [Serializable]
     public class SimpleModifiable<T> : Modifiable<T, Simple>
     {
@@ -62,6 +71,7 @@ namespace ModifiableVariable
         public static implicit operator SimpleModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable with additive, multiplicative and post-additive stages.</summary>
     [Serializable]
     public class ComplexModifiable<T> : Modifiable<T, Complex>
     {
@@ -72,6 +82,7 @@ namespace ModifiableVariable
         public static implicit operator ComplexModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for damage: flat, multiply, penetration and cap stages.</summary>
     [Serializable]
     public class DamageModifiable<T> : Modifiable<T, Damage>
     {
@@ -82,6 +93,7 @@ namespace ModifiableVariable
         public static implicit operator DamageModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for defense: flat, multiply and cap stages.</summary>
     [Serializable]
     public class DefenseModifiable<T> : Modifiable<T, Defense>
     {
@@ -92,6 +104,7 @@ namespace ModifiableVariable
         public static implicit operator DefenseModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for speed: flat, multiply and clamp stages.</summary>
     [Serializable]
     public class SpeedModifiable<T> : Modifiable<T, Speed>
     {
@@ -102,6 +115,7 @@ namespace ModifiableVariable
         public static implicit operator SpeedModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for resources: flat, multiply, regen and cap stages.</summary>
     [Serializable]
     public class ResourceModifiable<T> : Modifiable<T, Resource>
     {
@@ -112,6 +126,7 @@ namespace ModifiableVariable
         public static implicit operator ResourceModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for chance values: flat, multiply and cap stages.</summary>
     [Serializable]
     public class ChanceModifiable<T> : Modifiable<T, Chance>
     {
@@ -122,6 +137,7 @@ namespace ModifiableVariable
         public static implicit operator ChanceModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for cooldowns: reduction, multiply and floor stages.</summary>
     [Serializable]
     public class CooldownModifiable<T> : Modifiable<T, Cooldown>
     {
@@ -132,6 +148,7 @@ namespace ModifiableVariable
         public static implicit operator CooldownModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for colors: tint, overlay and override stages.</summary>
     [Serializable]
     public class ColorModifiable<T> : Modifiable<T, ColorModificator>
     {
@@ -142,6 +159,7 @@ namespace ModifiableVariable
         public static implicit operator ColorModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for positions: offset, scale and override stages.</summary>
     [Serializable]
     public class PositionModifiable<T> : Modifiable<T, Position>
     {
@@ -152,6 +170,7 @@ namespace ModifiableVariable
         public static implicit operator PositionModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable tuned for rotations: multiply and override stages.</summary>
     [Serializable]
     public class RotationModifiable<T> : Modifiable<T, Rotation>
     {
@@ -162,6 +181,7 @@ namespace ModifiableVariable
         public static implicit operator RotationModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable with a single override stage.</summary>
     [Serializable]
     public class OverridableModifiable<T> : Modifiable<T, Overridable>
     {
@@ -172,6 +192,7 @@ namespace ModifiableVariable
         public static implicit operator OverridableModifiable<T>(T obj) => new(obj);
     }
 
+    /// <summary>Modifiable with offset, lerp and override blend stages.</summary>
     [Serializable]
     public class BlendModifiable<T> : Modifiable<T, Blend>
     {

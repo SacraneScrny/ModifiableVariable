@@ -4,10 +4,15 @@ using System.Reflection;
 
 namespace ModifiableVariable.Stages.StageFactory
 {
+    /// <summary>Builds stages for a modifiable from the <see cref="StageOpAttribute"/> markers on its stage enum.</summary>
     public static class ModifiableFactory
     {
         static readonly Dictionary<Type, StageOpKind[]> _cache = new();
-        
+
+        /// <summary>
+        /// Adds a stage to <paramref name="modifiable"/> for every <typeparamref name="TStage"/>
+        /// member that carries a <see cref="StageOpAttribute"/> with an available operation.
+        /// </summary>
         public static void TryPopulate<T, TStage>(Modifiable<T, TStage> modifiable)
             where TStage : Enum
         {
@@ -47,6 +52,7 @@ namespace ModifiableVariable.Stages.StageFactory
         }
     }
     
+    /// <summary>Identifies the binary operation a stage applies between values.</summary>
     public enum StageOpKind
     {
         Add,

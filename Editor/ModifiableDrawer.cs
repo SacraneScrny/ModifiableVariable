@@ -9,10 +9,10 @@ using UnityEngine;
 
 namespace ModifiableVariable.Editor
 {
+    /// <summary>Inspector drawer that renders a modifiable's base value and a live computed result.</summary>
     [CustomPropertyDrawer(typeof(Modifiable<,>), true)]
     public class ModifiableDrawer : PropertyDrawer
     {
-        // ── визуальные константы ───────────────────────────────────────────
         static readonly Color BgColor = new(0.25f, 0.55f, 0.90f, 0.13f);
         static readonly Color BorderColor = new(0.30f, 0.60f, 0.95f, 0.55f);
         static readonly Color PanelBg = new(0f, 0f, 0f, 0.18f);
@@ -26,7 +26,6 @@ namespace ModifiableVariable.Editor
         const float Gap = 5f;
         const float BorderW = 1f;
 
-        // ── высота ────────────────────────────────────────────────────────
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             var baseValueProp = property.FindPropertyRelative("_baseValue");
@@ -37,20 +36,16 @@ namespace ModifiableVariable.Editor
             return OuterPad * 2 + HeaderH + Gap + PanelHeaderH + InnerPad + fieldH + InnerPad;
         }
 
-        // ── отрисовка ─────────────────────────────────────────────────────
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            // фон и рамка всего блока
             DrawFilledRect(position, BgColor);
             DrawBorder(position, BorderColor, BorderW);
 
             var inner = Shrink(position, OuterPad);
 
-            // заголовок с именем поля
             var headerRect = new Rect(inner.x, inner.y, inner.width, HeaderH);
             EditorGUI.LabelField(headerRect, label, EditorStyles.boldLabel);
 
-            // контентная зона под заголовком
             var contentY = inner.y + HeaderH + Gap;
             var contentH = inner.yMax - contentY;
             var halfW = (inner.width - Gap) * 0.5f;
@@ -62,7 +57,6 @@ namespace ModifiableVariable.Editor
             DrawResultPanel(rightRect, property);
         }
 
-        // ── левая панель: редактируемый BaseValue ─────────────────────────
         void DrawBasePanel(Rect rect, SerializedProperty property)
         {
             DrawPanelBackground(rect);
@@ -76,7 +70,6 @@ namespace ModifiableVariable.Editor
                 EditorGUI.PropertyField(fieldRect, baseValueProp, GUIContent.none, true);
         }
 
-        // ── правая панель: рилтайм-превью ─────────────────────────────────
         void DrawResultPanel(Rect rect, SerializedProperty property)
         {
             DrawPanelBackground(rect, ResultBg);
@@ -91,7 +84,6 @@ namespace ModifiableVariable.Editor
                 EditorGUI.LabelField(fieldRect, valueStr, Styles.ResultValue);
         }
 
-        // ── вспомогательные методы рендера ────────────────────────────────
         void DrawPanelBackground(Rect rect, Color? overrideBg = null)
         {
             DrawFilledRect(rect, overrideBg ?? PanelBg);
@@ -120,7 +112,6 @@ namespace ModifiableVariable.Editor
         static Rect Shrink(Rect r, float amount) =>
             new(r.x + amount, r.y + amount, r.width - amount * 2, r.height - amount * 2);
 
-        // ── рефлексия: получить значение из Modifiable ───────────────────
         static string GetEditorValue(SerializedProperty property)
         {
             try
@@ -178,7 +169,6 @@ namespace ModifiableVariable.Editor
             return null;
         }
 
-        // ── статические стили ─────────────────────────────────────────────
         static class Styles
         {
             public static readonly GUIStyle PanelTitle = new(EditorStyles.miniLabel)

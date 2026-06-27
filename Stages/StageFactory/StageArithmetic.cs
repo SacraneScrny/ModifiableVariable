@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace ModifiableVariable.Stages.StageFactory
 {
+    /// <summary>
+    /// Registry of binary operations per <see cref="StageOpKind"/> for a given type
+    /// <typeparamref name="T"/>. Built-in types are registered explicitly by the bootstrap
+    /// classes; unregistered types fall back to runtime expression compilation.
+    /// </summary>
     public static class StageArithmetic<T>
     {
         static readonly Dictionary<StageOpKind, StageOp<T>> _ops = new();
@@ -16,6 +21,7 @@ namespace ModifiableVariable.Stages.StageFactory
             Register(StageOpKind.Override, (a, b) => b);
         }
 
+        /// <summary>Returns the operation for the given kind, or null if none is available.</summary>
         public static StageOp<T> Get(StageOpKind kind)
         {
             if (_ops.TryGetValue(kind, out var op))
@@ -24,17 +30,12 @@ namespace ModifiableVariable.Stages.StageFactory
             return CompileFallback(kind);
         }
 
+        /// <summary>Registers an explicit operation for the given kind, replacing any existing one.</summary>
         public static void Register(StageOpKind kind, StageOp<T> op)
             => _ops[kind] = op;
 
-        // Fallback for types that were not registered explicitly (e.g. custom numeric
-        // structs). It relies on runtime expression compilation, which needs a JIT and is
-        // therefore NOT available on AOT/IL2CPP targets such as WebGL. Every built-in type
-        // (primitives + Unity structs) is registered explicitly in the bootstrap classes,
-        // so it never reaches this path and stays WebGL-safe.
         static StageOp<T> CompileFallback(StageOpKind kind)
         {
-            // Attempt compilation at most once per (type, kind); cache success and failure.
             if (!_fallbackTried.Add(kind))
                 return _ops.GetValueOrDefault(kind);
 
