@@ -11,12 +11,22 @@ namespace ModifiableVariable.Stages
     /// </summary>
     public class Stage<T> : IDisposable
     {
+        bool _disposed;
+        public bool IsDisposed => _disposed;
+        
         /// <summary>The binary operation applied between the running value and each modifier.</summary>
         public readonly StageOp<T> Op;
         readonly List<ModifierDelegate<T>> _modifiers = new();
 
         /// <summary>The modifiers contributing to this stage.</summary>
-        public IReadOnlyList<ModifierDelegate<T>> Modifiers => _modifiers;
+        public IReadOnlyList<ModifierDelegate<T>> Modifiers
+        {
+            get 
+            { 
+                if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
+                return _modifiers; 
+            }
+        }
 
         /// <summary>Creates a stage that applies the given binary operation.</summary>
         public Stage(StageOp<T> op)
@@ -24,37 +34,43 @@ namespace ModifiableVariable.Stages
             Op = op;
         }
 
-        /// <summary>Adds a value-producing modifier and returns a disposable handle.</summary>
-        public ModifierDelegateHandler<T> Add(Func<T> modifier)
+        internal ModifierDelegateHandler<T> Add(Func<T> modifier)
         {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             var d = new ModifierDelegate<T>(modifier);
             _modifiers.Add(d);
-            return new ModifierDelegateHandler<T>(d, Remove);
+            return new ModifierDelegateHandler<T>(d, HandleRemove);
         }
 
-        /// <summary>Adds a modifier delegate and returns a disposable handle.</summary>
-        public ModifierDelegateHandler<T> Add(ModifierDelegate<T> modifier)
+        internal ModifierDelegateHandler<T> Add(ModifierDelegate<T> modifier)
         {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             _modifiers.Add(modifier);
-            return new ModifierDelegateHandler<T>(modifier, Remove);
+            return new ModifierDelegateHandler<T>(modifier, HandleRemove);
         }
 
-        /// <summary>Removes a modifier from this stage.</summary>
-        public bool Remove(ModifierDelegate<T> modifier)
+        internal bool HandleRemove(ModifierDelegate<T> modifier)
         {
+            if (_disposed) return false;
+            var status = Remove(modifier);
+            if (status) 
+                HandleStageRemoved?.Invoke();
+            return status;
+        }
+        internal bool Remove(ModifierDelegate<T> modifier)
+        {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             var ret = _modifiers.Remove(modifier);
             return ret;
         }
-
-        /// <summary>Removes the modifier referenced by a handle from this stage.</summary>
-        public bool Remove(ModifierDelegateHandler<T> handler)
+        internal bool Remove(ModifierDelegateHandler<T> handler)
         {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             return Remove(handler.Modifier);
         }
-
-        /// <summary>Folds every modifier into <paramref name="baseValue"/> using the stage operation.</summary>
-        public T Proceed(T baseValue)
+        internal T Proceed(T baseValue)
         {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             var value = baseValue;
             for (var i = 0; i < _modifiers.Count; i++)
                 value = Op(value, _modifiers[i]());
@@ -65,10 +81,18 @@ namespace ModifiableVariable.Stages
         /// <summary>Removes all modifiers from this stage.</summary>
         public void Clear()
         {
+            if (_disposed) throw new ObjectDisposedException(nameof(Stage<T>));
             _modifiers.Clear();
         }
 
-        /// <summary>Clears the stage.</summary>
-        public void Dispose() => Clear();
+        public void Dispose()
+        {
+            if (_disposed) return;
+            Clear();
+            _disposed = true;
+            HandleStageRemoved = null;
+        }
+        
+        internal event Action HandleStageRemoved;
     }
 }

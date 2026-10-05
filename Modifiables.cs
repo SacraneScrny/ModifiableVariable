@@ -7,46 +7,46 @@ namespace ModifiableVariable
 {
     /// <summary>Modifiable with combined OR/AND/Override gate stages.</summary>
     [Serializable]
-    public class GateModifiable<T> : Modifiable<T, GateGeneral>
+    public class GateModifiable : Modifiable<bool, GateGeneral>
     {
-        public GateModifiable(T baseValue, params (GateGeneral, StageOp<T>)[] stages) :
+        public GateModifiable(bool baseValue, params (GateGeneral, StageOp<bool>)[] stages) :
             base(baseValue, stages) { }
-        public GateModifiable(T baseValue) : base(baseValue) { }
-        public static implicit operator T(GateModifiable<T> obj) => obj.Value;
-        public static implicit operator GateModifiable<T>(T obj) => new(obj);
+        public GateModifiable(bool baseValue) : base(baseValue) { }
+        public static implicit operator bool(GateModifiable obj) => obj.Value;
+        public static implicit operator GateModifiable(bool obj) => new(obj);
     }
 
     /// <summary>Modifiable with AND/Override gate stages.</summary>
     [Serializable]
-    public class GateConjunctionModifiable<T> : Modifiable<T, GateConjunction>
+    public class GateConjunctionModifiable : Modifiable<bool, GateConjunction>
     {
-        public GateConjunctionModifiable(T baseValue, params (GateConjunction, StageOp<T>)[] stages) :
+        public GateConjunctionModifiable(bool baseValue, params (GateConjunction, StageOp<bool>)[] stages) :
             base(baseValue, stages) { }
-        public GateConjunctionModifiable(T baseValue) : base(baseValue) { }
-        public static implicit operator T(GateConjunctionModifiable<T> obj) => obj.Value;
-        public static implicit operator GateConjunctionModifiable<T>(T obj) => new(obj);
+        public GateConjunctionModifiable(bool baseValue) : base(baseValue) { }
+        public static implicit operator bool(GateConjunctionModifiable obj) => obj.Value;
+        public static implicit operator GateConjunctionModifiable(bool obj) => new(obj);
     }
 
     /// <summary>Modifiable with OR/Override gate stages.</summary>
     [Serializable]
-    public class GateDisjunctionModifiable<T> : Modifiable<T, GateDisjunction>
+    public class GateDisjunctionModifiable : Modifiable<bool, GateDisjunction>
     {
-        public GateDisjunctionModifiable(T baseValue, params (GateDisjunction, StageOp<T>)[] stages) :
+        public GateDisjunctionModifiable(bool baseValue, params (GateDisjunction, StageOp<bool>)[] stages) :
             base(baseValue, stages) { }
-        public GateDisjunctionModifiable(T baseValue) : base(baseValue) { }
-        public static implicit operator T(GateDisjunctionModifiable<T> obj) => obj.Value;
-        public static implicit operator GateDisjunctionModifiable<T>(T obj) => new(obj);
+        public GateDisjunctionModifiable(bool baseValue) : base(baseValue) { }
+        public static implicit operator bool(GateDisjunctionModifiable obj) => obj.Value;
+        public static implicit operator GateDisjunctionModifiable(bool obj) => new(obj);
     }
 
     /// <summary>Modifiable with a multi-step OR/AND/OR/Override gate pipeline.</summary>
     [Serializable]
-    public class GateComplexModifiable<T> : Modifiable<T, GateComplex>
+    public class GateComplexModifiable : Modifiable<bool, GateComplex>
     {
-        public GateComplexModifiable(T baseValue, params (GateComplex, StageOp<T>)[] stages) :
+        public GateComplexModifiable(bool baseValue, params (GateComplex, StageOp<bool>)[] stages) :
             base(baseValue, stages) { }
-        public GateComplexModifiable(T baseValue) : base(baseValue) { }
-        public static implicit operator T(GateComplexModifiable<T> obj) => obj.Value;
-        public static implicit operator GateComplexModifiable<T>(T obj) => new(obj);
+        public GateComplexModifiable(bool baseValue) : base(baseValue) { }
+        public static implicit operator bool(GateComplexModifiable obj) => obj.Value;
+        public static implicit operator GateComplexModifiable(bool obj) => new(obj);
     }
 
     /// <summary>Default modifiable with additive then multiplicative stages.</summary>

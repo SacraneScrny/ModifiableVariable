@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 
+using UnityEngine;
+
 namespace ModifiableVariable.Stages.StageFactory
 {
     /// <summary>Builds stages for a modifiable from the <see cref="StageOpAttribute"/> markers on its stage enum.</summary>
@@ -13,19 +15,33 @@ namespace ModifiableVariable.Stages.StageFactory
         /// Adds a stage to <paramref name="modifiable"/> for every <typeparamref name="TStage"/>
         /// member that carries a <see cref="StageOpAttribute"/> with an available operation.
         /// </summary>
-        public static void TryPopulate<T, TStage>(Modifiable<T, TStage> modifiable)
+        public static bool TryPopulate<T, TStage>(Modifiable<T, TStage> modifiable)
             where TStage : Enum
         {
             var values = (TStage[])Enum.GetValues(typeof(TStage));
             var ops = TryGetOps<TStage>();
-            if (ops == null) return;
+            if (ops == null)
+            {
+                Debug.LogWarning($"No {nameof(StageOpAttribute)} found on any members of {typeof(TStage).Name}. Stages will not be created.");
+                return false;
+            }
 
+            bool hasAny = false;
             for (var i = 0; i < values.Length; i++)
             {
                 var s = StageArithmetic<T>.Get(ops[i]);
-                if (s == null) continue;
+                if (s == null)
+                {
+                    Debug.LogWarning($"No {ops[i]} operation available for type {typeof(T).Name}. Stage {values[i]}.");
+                    continue;
+                }
+                hasAny = true;
                 modifiable.AddStage(s, values[i]);
             }
+
+            if (!hasAny)
+                Debug.LogWarning($"No {nameof(StageOpAttribute)} found on any members of {typeof(TStage).Name}. Stages is empty.");
+            return hasAny;
         }
 
         static StageOpKind[] TryGetOps<TStage>() where TStage : Enum

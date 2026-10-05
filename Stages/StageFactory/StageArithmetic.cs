@@ -41,7 +41,11 @@ namespace ModifiableVariable.Stages.StageFactory
 
             var factory = GetExpressionFactory(kind);
             if (factory == null)
+            {
+                Debug.LogWarning($"[ModifiableVariable] No '{kind}' operation available for type '{typeof(T).Name}'. " +
+                    "No expression factory is defined for this kind. Register it explicitly via StageArithmetic<{typeof(T).Name}>.Register(...).");
                 return null;
+            }
 
             try
             {
@@ -49,6 +53,9 @@ namespace ModifiableVariable.Stages.StageFactory
                 var b = Expression.Parameter(typeof(T), "b");
                 var op = Expression.Lambda<StageOp<T>>(factory(a, b), a, b).Compile();
                 _ops[kind] = op;
+                Debug.LogWarning($"[ModifiableVariable] No '{kind}' operation available for type '{typeof(T).Name}'. " +
+                    "Runtime compilation succeeded, but this may not work on AOT/IL2CPP/WebGL. " +
+                    $"Register it explicitly via StageArithmetic<{typeof(T).Name}>.Register(...).");
                 return op;
             }
             catch (Exception e)

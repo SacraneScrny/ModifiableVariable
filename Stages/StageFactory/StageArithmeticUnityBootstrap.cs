@@ -2,21 +2,11 @@
 
 namespace ModifiableVariable.Stages.StageFactory
 {
-    /// <summary>
-    /// Registers Unity struct types and <see cref="bool"/> with explicit delegates so they
-    /// never depend on runtime expression compilation, keeping them functional on AOT/IL2CPP
-    /// targets such as WebGL.
-    /// </summary>
     public static class StageArithmeticUnityBootstrap
     {
-        /// <summary>Registers the built-in Unity and boolean operations.</summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Init()
         {
-            StageArithmetic<bool>.Register(StageOpKind.Override, (a, b) => b);
-            StageArithmetic<bool>.Register(StageOpKind.Or, (a, b) => a | b);
-            StageArithmetic<bool>.Register(StageOpKind.And, (a, b) => a & b);
-
             StageArithmetic<Vector2>.Register(StageOpKind.Add, (a, b) => a + b);
             StageArithmetic<Vector2>.Register(StageOpKind.Subtract, (a, b) => a - b);
             StageArithmetic<Vector2>.Register(StageOpKind.Multiply, Vector2.Scale);

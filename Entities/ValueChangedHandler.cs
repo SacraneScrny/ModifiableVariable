@@ -1,5 +1,7 @@
 using System;
 
+using UnityEngine;
+
 namespace ModifiableVariable.Entities
 {
     /// <summary>Disposable handle that unsubscribes its value-changed callback when disposed.</summary>
@@ -20,8 +22,14 @@ namespace ModifiableVariable.Entities
         /// <summary>Unsubscribes the referenced callback.</summary>
         public void Dispose()
         {
-            try { _disposeDelegate?.Invoke(_action); }
-            catch { }
+            try
+            {
+                _disposeDelegate?.Invoke(_action);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 }

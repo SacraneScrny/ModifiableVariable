@@ -1,5 +1,7 @@
 using System;
 
+using UnityEngine;
+
 namespace ModifiableVariable.Entities
 {
     /// <summary>Disposable handle that removes its modifier from the owning stage when disposed.</summary>
@@ -21,11 +23,13 @@ namespace ModifiableVariable.Entities
         /// <summary>Removes the referenced modifier from its stage.</summary>
         public void Dispose()
         {
-            try {
+            try 
+            {
                 _disposeDelegate?.Invoke(Modifier);
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogException(e);
             }
         }
     }
