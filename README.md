@@ -2,7 +2,38 @@
 
 > Stackable, ordered stat modifiers for Unity — base value in, gameplay-ready value out.
 
-![Unity](https://img.shields.io/badge/Unity-C%23-blue) ![License](https://img.shields.io/badge/license-TODO-lightgrey)
+![Unity](https://img.shields.io/badge/Unity-2021.3%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![UPM](https://img.shields.io/badge/UPM-git-orange)
+
+---
+
+## 📦 Installation
+
+Pick any one of these:
+
+**1. Package Manager — Add from Git URL (recommended)**
+`Window → Package Manager → + → Add package from git URL…`, then paste:
+
+```text
+https://github.com/SacraneScrny/ModifiableVariable.git#1.0.0
+```
+
+Omit `#1.0.0` to track the latest `main`.
+
+**2. Via `manifest.json`**
+Add this line to `Packages/manifest.json` in your Unity project:
+
+```json
+{
+  "dependencies": {
+    "com.sacranescrny.modifiablevariable": "https://github.com/SacraneScrny/ModifiableVariable.git#1.0.0"
+  }
+}
+```
+
+**3. Manual copy**
+Download the [ZIP](https://github.com/SacraneScrny/ModifiableVariable/archive/refs/heads/main.zip) (or clone the repo) and copy the folder into your project as `Assets/ModifiableVariable` (classic `.unitypackage`-style install) or `Packages/ModifiableVariable` (embedded package).
+
+> Requirements: Unity 2021.3+, no external dependencies. Do not delete the `.meta` files — the package breaks without them.
 
 ---
 
@@ -93,7 +124,7 @@ Ready-made pipelines in `Modifiables.cs`: `Simple / General / Complex / Damage /
 
 ## 🚀 Quick Start
 
-**Install:** copy this folder into `Assets/` (assembly: `ModifiableVariables`). Ops auto-register on load via bootstraps.
+**Install:** see [📦 Installation](#-installation) above (Git URL, `manifest.json`, or manual copy). Ops auto-register on load via bootstraps.
 
 ```csharp
 using ModifiableVariable;
@@ -215,4 +246,4 @@ ModifiableVariable/
 
 ## 📄 License
 
-TODO: Needs confirmation — no `LICENSE` file found in this repository.
+MIT — see [LICENSE](LICENSE).

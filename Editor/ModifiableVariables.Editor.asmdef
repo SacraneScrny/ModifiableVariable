@@ -1,8 +1,12 @@
 {
-    "name": "ModifiableVariables",
-    "rootNamespace": "ModifiableVariable",
-    "references": [],
-    "includePlatforms": [],
+    "name": "ModifiableVariables.Editor",
+    "rootNamespace": "ModifiableVariable.Editor",
+    "references": [
+        "ModifiableVariables"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

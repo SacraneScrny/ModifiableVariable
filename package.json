@@ -1,0 +1,27 @@
+{
+  "name": "com.sacranescrny.modifiablevariable",
+  "displayName": "ModifiableVariable",
+  "version": "1.0.0",
+  "unity": "2021.3",
+  "unityRelease": "0f1",
+  "description": "Stackable, ordered stat modifiers for Unity — base value in, gameplay-ready value out. Buffs, debuffs, gear and status effects stack in a predictable order (flat → multiply → cap), recalculate only when needed, and notify on change.",
+  "keywords": [
+    "gameplay",
+    "stats",
+    "modifiers",
+    "buffs",
+    "rpg"
+  ],
+  "category": "Gameplay",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SacraneScrny/ModifiableVariable.git"
+  },
+  "author": {
+    "name": "SacraneScrny",
+    "url": "https://github.com/SacraneScrny"
+  },
+  "license": "MIT - see LICENSE",
+  "dependencies": {},
+  "samples": []
+}
